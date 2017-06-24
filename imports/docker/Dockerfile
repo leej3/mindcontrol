@@ -8,9 +8,16 @@ ENV LC_ALL C
 
 RUN apt-get update
 RUN apt-get install -y git python3
+RUN apt-get install -y python-dev python-setuptools python-numpy python-scipy
+RUN easy_install pip
+RUN pip install numpy wget nibabel dipy awscli==1.11.31 boto3==1.3.1 python-dateutil==2.5 requests==2.5.3 matplotlib==1.5.1 scikit-learn scikit-image nilearn
+RUN pip install ndmg==0.0.49-1
 RUN npm install http-server -g
 
+RUN apt-get install -y emacs vim
+
 ADD entrypoint.sh /home/entrypoint.sh
+ADD ndmg_launch.sh /home/ndmg_launch.sh
 
 RUN useradd  --create-home --home-dir ${MC_DIR} mindcontrol
 RUN chown mindcontrol:mindcontrol /home/entrypoint.sh
