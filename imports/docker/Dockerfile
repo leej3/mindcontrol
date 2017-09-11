@@ -19,22 +19,41 @@ RUN ln -s ~/.meteor/packages/meteor-tool/*/mt-os.linux.x86_64/dev_bundle/bin/nod
         rm /etc/nginx/conf.d/default.conf
 
 
-RUN apt-get update
-RUN apt-get install -y git python3
-RUN apt-get install -y python-dev python-setuptools python-numpy python-scipy
-RUN easy_install pip
-RUN pip install numpy wget nibabel dipy awscli==1.11.31 boto3==1.3.1 python-dateutil==2.5 requests==2.5.3 matplotlib==1.5.1 scikit-learn scikit-image nilearn
-RUN pip install ndmg==0.0.49-1
+# Installing and setting up miniconda
+RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-4.3.11-Linux-x86_64.sh && \
+    bash Miniconda3-4.3.11-Linux-x86_64.sh -b -p /usr/local/miniconda && \
+    rm Miniconda3-4.3.11-Linux-x86_64.sh
+
+ENV PATH=/usr/local/miniconda/bin:$PATH \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
+
+# Installing precomputed python packages
+RUN conda install -c conda-forge -y \
+                     awscli \
+                     boto3 \
+                     dipy \
+                     git \
+                     matplotlib \
+                     numpy \
+                     python=3.6 \
+                     scikit-image \
+                     scikit-learn \
+                     wget; \
+    sync &&  \
+    chmod +x /usr/local/miniconda/bin/* && \
+    conda clean --all -y; sync && \
+    python -c "from matplotlib import font_manager" && \
+    sed -i 's/\(backend *: \).*$/\1Agg/g' $( python -c "import matplotlib; print(matplotlib.matplotlib_fname())" )
+
 RUN npm install http-server -g
-
-
 
 ENV MC_DIR /home/mindcontrol
 ENV LC_ALL C
 
 
-ADD entrypoint.sh /home/entrypoint.sh
-ADD ndmg_launch.sh /home/ndmg_launch.sh
+COPY entrypoint.sh /home/entrypoint.sh
+COPY  ndmg_launch.sh /home/ndmg_launch.sh
 
 RUN useradd  --create-home --home-dir ${MC_DIR} mindcontrol
 RUN chown mindcontrol:mindcontrol /home/entrypoint.sh
