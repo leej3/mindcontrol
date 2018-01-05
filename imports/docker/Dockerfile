@@ -63,16 +63,29 @@ RUN mkdir -p ${MC_DIR}/mindcontrol &&\
     chown -R mindcontrol /home/mindcontrol &&\
     chmod -R a+rx /home/mindcontrol
 
+
 USER mindcontrol
 
 RUN cd ${MC_DIR}/mindcontrol &&\
     git clone https://github.com/clowdcontrol/mindcontrol.git ${MC_DIR}/mindcontrol
 
-EXPOSE 3000
+####### Attempt at nginx security
+
+WORKDIR /opt
+COPY ./settings/auth.conf /etc/nginx/conf.d/auth.conf
+COPY ./settings/auth.htpasswd /etc/nginx
+COPY ./settings/nginx.conf /etc/nginx/nginx.conf
+USER root
+RUN chmod 777 /var/log/nginx
+USER mindcontrol
+COPY launch.sh /home
+######
+
 WORKDIR ${MC_DIR}/mindcontrol
 
 ENTRYPOINT ["/home/entrypoint.sh"]
 
 
+EXPOSE 3000
 ENV PORT 3000
 
