@@ -113,3 +113,71 @@ name:"aparcaseg",
     ]
     })
 
+
+TabularTables.mriqc_entry =  new Tabular.Table({
+name:"mriqc_entry",
+    autoWidth: false,
+    collection: Subjects,
+    columns:[
+    
+      
+        get_filter_field("mriqc_entry", "subject_id", "Exam ID"),
+      
+    
+      
+        get_qc_viewer("mriqc_entry", "name", "Freesurfer ID"),
+      
+    
+      
+        get_qc_filter_field("mriqc_entry", "quality_check.QC", "QC"),
+      
+    
+      
+        get_filter_field("mriqc_entry", "checkedBy", "checked by"),
+      
+    
+      
+        get_filter_field("mriqc_entry", "quality_check.user_assign", "Assigned To"),
+      
+    
+      
+        {data: "quality_check.notes_QC", title: "Notes" }
+      
+    
+    ]
+    })
+
+
+TabularTables.manual_meta =  new Tabular.Table({
+name:"manual_meta",
+    autoWidth: false,
+    collection: Subjects,
+    columns:[
+    
+      
+        get_filter_field("manual_meta", "subject_id", "Exam ID"),
+      
+    
+      
+        get_qc_viewer("manual_meta", "name", "Freesurfer ID"),
+      
+    
+      
+        get_qc_filter_field("manual_meta", "quality_check.QC", "QC"),
+      
+    
+      
+        get_filter_field("manual_meta", "checkedBy", "checked by"),
+      
+    
+      
+        get_filter_field("manual_meta", "quality_check.user_assign", "Assigned To"),
+      
+    
+      
+        {data: "quality_check.notes_QC", title: "Notes" }
+      
+    
+    ]
+    })
+

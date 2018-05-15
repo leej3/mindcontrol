@@ -143,6 +143,50 @@ Template.aparcaseg.rendered = function() {
 
 
 
+Template.mriqc_entry.rendered = function() {
+
+      if (!this.rendered){
+        this.rendered = true
+         }
+
+
+    
+
+       this.autorun(function() {
+                render_histogram("mriqc_entry")
+
+       }); //end autorun
+
+     
+
+  }
+
+
+
+
+
+Template.manual_meta.rendered = function() {
+
+      if (!this.rendered){
+        this.rendered = true
+         }
+
+
+    
+
+       this.autorun(function() {
+                render_histogram("manual_meta")
+
+       }); //end autorun
+
+     
+
+  }
+
+
+
+
+
 
 
 Template.brainmask.helpers({
@@ -202,6 +246,44 @@ currentMetric: function(){
 
 
 
+Template.mriqc_entry.helpers({
+
+selector: function(){return get_filter("mriqc_entry")},
+
+
+
+metric: function(){
+        return get_metrics("mriqc_entry")
+    },
+currentMetric: function(){
+        return Session.get("current_mriqc_entry")
+    }
+
+
+
+})
+
+
+
+Template.manual_meta.helpers({
+
+selector: function(){return get_filter("manual_meta")},
+
+
+
+metric: function(){
+        return get_metrics("manual_meta")
+    },
+currentMetric: function(){
+        return Session.get("current_manual_meta")
+    }
+
+
+
+})
+
+
+
 
   
    Template.brainmask.events({
@@ -229,6 +311,26 @@ currentMetric: function(){
         var metric = $(event.currentTarget).val()
         console.log("metric: ", metric)
         Session.set("current_aparcaseg", metric)
+    }
+   })
+  
+
+  
+   Template.mriqc_entry.events({
+    "change #metric-select-mriqc_entry": function(event, template){
+        var metric = $(event.currentTarget).val()
+        console.log("metric: ", metric)
+        Session.set("current_mriqc_entry", metric)
+    }
+   })
+  
+
+  
+   Template.manual_meta.events({
+    "change #metric-select-manual_meta": function(event, template){
+        var metric = $(event.currentTarget).val()
+        console.log("metric: ", metric)
+        Session.set("current_manual_meta", metric)
     }
    })
   
